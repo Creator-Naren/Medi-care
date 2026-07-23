@@ -109,7 +109,7 @@ You can use the following credentials to log in and test the application:
 
 | Dashboard | Appointments |
 | :---: | :---: |
-| <img src="https://raw.githubusercontent.com/your-username/your-repo-name/main/Images/Dashboard.png" alt="Dashboard" width="100%"> | <img src="https://raw.githubusercontent.com/your-username/your-repo-name/main/Images/Screenshot%202026-07-23%20204159.png" alt="Appointments" width="100%"> |
+| <img src="Images/Dashboard.png" alt="Dashboard" width="100%"> | <img src="https://raw.githubusercontent.com/your-username/your-repo-name/main/Images/Screenshot%202026-07-23%20204159.png" alt="Appointments" width="100%"> |
 
 | Billing | Patient History |
 | :---: | :---: |
