@@ -2,7 +2,7 @@
 # 🏥 Medicare - Hospital Management System 🏥
 
 <p align="center">
-  <img src="https://raw.githubusercontent.com/your-username/your-repo-name/main/Images/Dashboard.png" alt="Dashboard Screenshot" width="80%">
+  <img src="Images/Dashboard.png" alt="Dashboard" width="100%" alt="Dashboard Screenshot" width="80%">
 </p>
 
 <p align="center">
