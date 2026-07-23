@@ -113,7 +113,7 @@ You can use the following credentials to log in and test the application:
 
 **| Billing | Prescription | Doctors|**
 | :---: | :---: |
-| <img src="https://raw.githubusercontent.com/your-username/your-repo-name/main/Images/Screenshot%202026-07-23%20204237.png" alt="Billing" width="100%"> | <img src="Images/Screenshot 2026-07-23 204237.png" alt="Prescription" width="100%"> | <img src="Images/Screenshot 2026-07-23 204128.png" alt="Doctors" width="100%"> |
+| <img src="Images/Screenshot 2026-07-23 204308.png" alt="Billing" width="100%"> | <img src="Images/Screenshot 2026-07-23 204237.png" alt="Prescription" width="100%"> | <img src="Images/Screenshot 2026-07-23 204128.png" alt="Doctors" width="100%"> |
 
 ---
 
