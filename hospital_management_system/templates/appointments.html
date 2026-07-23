@@ -1,0 +1,140 @@
+{% extends "base.html" %}
+
+{% block title %}Appointments Queue - MediCare HMS{% endblock %}
+
+{% block content %}
+<div class="page-header">
+    <div>
+        <h1 class="page-title">Appointment Booking & Queue</h1>
+        <p class="page-subtitle">Schedule consultation slots, manage patient queues, and update visit statuses.</p>
+    </div>
+    <button onclick="openModal('bookApptModal')" class="btn btn-primary"><i class="ri-calendar-check-line"></i> Book New Appointment</button>
+</div>
+
+<!-- Appointments Table Card -->
+<div class="card">
+    <div class="card-header">
+        <h3 class="card-title"><i class="ri-calendar-todo-line"></i> All Scheduled Appointments</h3>
+    </div>
+    <div class="card-body" style="padding: 0;">
+        <div class="table-responsive">
+            <table class="custom-table">
+                <thead>
+                    <tr>
+                        <th>Code</th>
+                        <th>Patient</th>
+                        <th>Assigned Doctor</th>
+                        <th>Date & Time</th>
+                        <th>Reason for Visit</th>
+                        <th>Status</th>
+                        <th>Update Status</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for appt in appointments %}
+                    <tr>
+                        <td style="font-weight: 700;">{{ appt.appointment_code }}</td>
+                        <td>
+                            <div style="font-weight: 700;">{{ appt.patient_name }}</div>
+                            <small style="color: var(--text-muted);">{{ appt.patient_phone }}</small>
+                        </td>
+                        <td>
+                            <div style="font-weight: 700;">{{ appt.doctor_name }}</div>
+                            <small style="color: var(--brand-primary);">{{ appt.specialization }}</small>
+                        </td>
+                        <td>
+                            <div><strong>{{ appt.appointment_date }}</strong></div>
+                            <small style="color: var(--text-muted);">{{ appt.appointment_time }}</small>
+                        </td>
+                        <td>{{ appt.reason }}</td>
+                        <td>
+                            {% if appt.status == 'Scheduled' %}
+                                <span class="badge badge-warning">Scheduled</span>
+                            {% elif appt.status == 'In Progress' %}
+                                <span class="badge badge-info">In Progress</span>
+                            {% elif appt.status == 'Completed' %}
+                                <span class="badge badge-success">Completed</span>
+                            {% else %}
+                                <span class="badge badge-danger">Cancelled</span>
+                            {% endif %}
+                        </td>
+                        <td>
+                            <form action="{{ url_for('update_appointment_status', appointment_id=appt.id) }}" method="POST" style="display: flex; gap: 0.4rem;">
+                                <select name="status" class="form-control" style="padding: 0.35rem 0.5rem; font-size: 0.8rem; width: auto;" onchange="this.form.submit()">
+                                    <option value="Scheduled" {% if appt.status == 'Scheduled' %}selected{% endif %}>Scheduled</option>
+                                    <option value="In Progress" {% if appt.status == 'In Progress' %}selected{% endif %}>In Progress</option>
+                                    <option value="Completed" {% if appt.status == 'Completed' %}selected{% endif %}>Completed</option>
+                                    <option value="Cancelled" {% if appt.status == 'Cancelled' %}selected{% endif %}>Cancelled</option>
+                                </select>
+                            </form>
+                        </td>
+                    </tr>
+                    {% else %}
+                    <tr>
+                        <td colspan="7" style="text-align: center; color: var(--text-muted); padding: 2rem;">No appointments found in system.</td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+
+<!-- Book Appointment Modal -->
+<div id="bookApptModal" class="modal-overlay">
+    <div class="modal-card">
+        <div class="modal-header">
+            <h3 class="modal-title"><i class="ri-calendar-event-line"></i> Book Patient Appointment</h3>
+            <button class="modal-close" onclick="closeModal('bookApptModal')">&times;</button>
+        </div>
+        <form action="{{ url_for('book_appointment') }}" method="POST">
+            <div class="modal-body">
+                <div class="form-group">
+                    <label>Select Patient *</label>
+                    <select name="patient_id" class="form-control" required>
+                        <option value="">-- Choose Registered Patient --</option>
+                        {% for p in patients %}
+                        <option value="{{ p.id }}">{{ p.name }} ({{ p.patient_code }})</option>
+                        {% endfor %}
+                    </select>
+                </div>
+
+                <div class="form-group">
+                    <label>Select Doctor Specialist *</label>
+                    <select name="doctor_id" class="form-control" required>
+                        <option value="">-- Choose Active Doctor --</option>
+                        {% for d in doctors %}
+                        <option value="{{ d.id }}">{{ d.name }} - {{ d.specialization }} (Fee: ${{ d.consultation_fee }})</option>
+                        {% endfor %}
+                    </select>
+                </div>
+
+                <div class="form-grid">
+                    <div class="form-group">
+                        <label>Appointment Date *</label>
+                        <input type="date" name="appointment_date" class="form-control" required>
+                    </div>
+                    <div class="form-group">
+                        <label>Time Slot *</label>
+                        <input type="text" name="appointment_time" class="form-control" placeholder="e.g. 10:30 AM" required>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label>Reason for Visit</label>
+                    <input type="text" name="reason" class="form-control" placeholder="e.g. Annual Checkup, Severe Headache, Fever">
+                </div>
+
+                <div class="form-group">
+                    <label>Clinical Notes</label>
+                    <textarea name="notes" class="form-control" rows="2" placeholder="Internal instructions or pre-requisite instructions"></textarea>
+                </div>
+            </div>
+            <div style="padding: 1rem 1.5rem; border-top: 1px solid var(--border-color); display: flex; justify-content: flex-end; gap: 0.75rem;">
+                <button type="button" class="btn btn-secondary" onclick="closeModal('bookApptModal')">Cancel</button>
+                <button type="submit" class="btn btn-primary">Confirm Appointment</button>
+            </div>
+        </form>
+    </div>
+</div>
+{% endblock %}
