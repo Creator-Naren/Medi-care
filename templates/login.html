@@ -1,0 +1,125 @@
+{% extends "base.html" %}
+
+{% block title %}Login - MediCare HMS{% endblock %}
+
+{% block auth_content %}
+<div style="min-height: 100vh; display: flex; align-items: center; justify-content: center; background: linear-gradient(135deg, #0f172a, #1e293b); padding: 1.5rem;">
+    <div style="width: 100%; max-width: 440px; background-color: #151c2c; border: 1px solid #273549; border-radius: 16px; padding: 2.5rem; box-shadow: 0 20px 40px rgba(0,0,0,0.5); color: #ffffff;">
+        
+        <div style="text-align: center; margin-bottom: 2rem;">
+            <div style="width: 56px; height: 56px; background: linear-gradient(135deg, #0284c7, #0d9488); border-radius: 14px; display: inline-flex; align-items: center; justify-content: center; font-size: 2rem; color: #ffffff; margin-bottom: 1rem; box-shadow: 0 4px 15px rgba(2, 132, 199, 0.4);">
+                <i class="ri-heart-pulse-fill"></i>
+            </div>
+            <h1 style="font-size: 1.75rem; font-weight: 800; margin-bottom: 0.3rem;">MediCare HMS</h1>
+            <p style="color: #94a3b8; font-size: 0.9rem;">Hospital Management System Sign In</p>
+        </div>
+
+        {% with messages = get_flashed_messages(with_categories=true) %}
+            {% if messages %}
+                {% for category, message in messages %}
+                    <div style="padding: 0.75rem 1rem; border-radius: 8px; font-size: 0.85rem; margin-bottom: 1.25rem; {% if category == 'danger' %}background: rgba(239, 68, 68, 0.2); color: #fca5a5; border: 1px solid #ef4444;{% else %}background: rgba(16, 185, 129, 0.2); color: #6ee7b7; border: 1px solid #10b981;{% endif %}">
+                        {{ message }}
+                    </div>
+                {% endfor %}
+            {% endif %}
+        {% endwith %}
+
+        <!-- Tab Toggle for Login vs Signup -->
+        <div style="display: flex; background: #0b0f19; padding: 4px; border-radius: 8px; margin-bottom: 1.5rem;">
+            <button id="loginTabBtn" onclick="switchAuthTab('login')" style="flex: 1; padding: 0.6rem; border: none; border-radius: 6px; font-size: 0.85rem; font-weight: 700; cursor: pointer; background: #0284c7; color: #ffffff;">Log In</button>
+            <button id="signupTabBtn" onclick="switchAuthTab('signup')" style="flex: 1; padding: 0.6rem; border: none; border-radius: 6px; font-size: 0.85rem; font-weight: 700; cursor: pointer; background: transparent; color: #94a3b8;">Register</button>
+        </div>
+
+        <!-- Login Form -->
+        <form id="loginForm" action="{{ url_for('login') }}" method="POST">
+            <div style="margin-bottom: 1.25rem;">
+                <label style="display: block; font-size: 0.82rem; font-weight: 700; color: #cbd5e1; margin-bottom: 0.4rem;">Username</label>
+                <input type="text" id="loginUsername" name="username" style="width: 100%; padding: 0.75rem 1rem; background: #0b0f19; border: 1px solid #273549; border-radius: 8px; color: #ffffff; outline: none; font-size: 0.9rem;" placeholder="e.g. admin" required>
+            </div>
+
+            <div style="margin-bottom: 1.5rem;">
+                <label style="display: block; font-size: 0.82rem; font-weight: 700; color: #cbd5e1; margin-bottom: 0.4rem;">Password</label>
+                <input type="password" id="loginPassword" name="password" style="width: 100%; padding: 0.75rem 1rem; background: #0b0f19; border: 1px solid #273549; border-radius: 8px; color: #ffffff; outline: none; font-size: 0.9rem;" placeholder="••••••••" required>
+            </div>
+
+            <button type="submit" style="width: 100%; padding: 0.8rem; background: linear-gradient(135deg, #0284c7, #0369a1); border: none; border-radius: 8px; color: #ffffff; font-size: 0.95rem; font-weight: 700; cursor: pointer; box-shadow: 0 4px 12px rgba(2, 132, 199, 0.3);">
+                Sign In to Account
+            </button>
+        </form>
+
+        <!-- Register Form (hidden by default) -->
+        <form id="signupForm" action="{{ url_for('register') }}" method="POST" style="display: none;">
+            <div style="margin-bottom: 1rem;">
+                <label style="display: block; font-size: 0.82rem; font-weight: 700; color: #cbd5e1; margin-bottom: 0.3rem;">Full Name</label>
+                <input type="text" name="name" style="width: 100%; padding: 0.65rem 1rem; background: #0b0f19; border: 1px solid #273549; border-radius: 8px; color: #ffffff; outline: none; font-size: 0.9rem;" placeholder="Dr. Alice Vance" required>
+            </div>
+            <div style="margin-bottom: 1rem;">
+                <label style="display: block; font-size: 0.82rem; font-weight: 700; color: #cbd5e1; margin-bottom: 0.3rem;">Username</label>
+                <input type="text" name="username" style="width: 100%; padding: 0.65rem 1rem; background: #0b0f19; border: 1px solid #273549; border-radius: 8px; color: #ffffff; outline: none; font-size: 0.9rem;" placeholder="alice_vance" required>
+            </div>
+            <div style="margin-bottom: 1rem;">
+                <label style="display: block; font-size: 0.82rem; font-weight: 700; color: #cbd5e1; margin-bottom: 0.3rem;">Email Address</label>
+                <input type="email" name="email" style="width: 100%; padding: 0.65rem 1rem; background: #0b0f19; border: 1px solid #273549; border-radius: 8px; color: #ffffff; outline: none; font-size: 0.9rem;" placeholder="alice@medicare.com" required>
+            </div>
+            <div style="margin-bottom: 1rem;">
+                <label style="display: block; font-size: 0.82rem; font-weight: 700; color: #cbd5e1; margin-bottom: 0.3rem;">Account Role</label>
+                <select name="role" style="width: 100%; padding: 0.65rem 1rem; background: #0b0f19; border: 1px solid #273549; border-radius: 8px; color: #ffffff; outline: none; font-size: 0.9rem;">
+                    <option value="patient">Patient</option>
+                    <option value="doctor">Doctor</option>
+                    <option value="admin">Administrator</option>
+                </select>
+            </div>
+            <div style="margin-bottom: 1.5rem;">
+                <label style="display: block; font-size: 0.82rem; font-weight: 700; color: #cbd5e1; margin-bottom: 0.3rem;">Password</label>
+                <input type="password" name="password" style="width: 100%; padding: 0.65rem 1rem; background: #0b0f19; border: 1px solid #273549; border-radius: 8px; color: #ffffff; outline: none; font-size: 0.9rem;" placeholder="••••••••" required>
+            </div>
+
+            <button type="submit" style="width: 100%; padding: 0.8rem; background: linear-gradient(135deg, #0d9488, #0f766e); border: none; border-radius: 8px; color: #ffffff; font-size: 0.95rem; font-weight: 700; cursor: pointer;">
+                Create New Account
+            </button>
+        </form>
+
+        <!-- Quick Demo Login Presets -->
+        <div style="margin-top: 2rem; padding-top: 1.5rem; border-top: 1px solid #273549;">
+            <p style="font-size: 0.78rem; color: #94a3b8; font-weight: 700; margin-bottom: 0.75rem; text-align: center; text-transform: uppercase; letter-spacing: 0.05em;">Quick Demo Credentials</p>
+            <div style="display: flex; gap: 0.5rem;">
+                <button type="button" onclick="fillDemo('admin', 'admin123')" style="flex: 1; padding: 0.4rem; background: #1e293b; border: 1px solid #334155; border-radius: 6px; color: #38bdf8; font-size: 0.78rem; font-weight: 600; cursor: pointer;">Admin</button>
+                <button type="button" onclick="fillDemo('dr_smith', 'doc123')" style="flex: 1; padding: 0.4rem; background: #1e293b; border: 1px solid #334155; border-radius: 6px; color: #2dd4bf; font-size: 0.78rem; font-weight: 600; cursor: pointer;">Doctor</button>
+                <button type="button" onclick="fillDemo('john_doe', 'user123')" style="flex: 1; padding: 0.4rem; background: #1e293b; border: 1px solid #334155; border-radius: 6px; color: #a78bfa; font-size: 0.78rem; font-weight: 600; cursor: pointer;">Patient</button>
+            </div>
+        </div>
+
+    </div>
+</div>
+
+<script>
+function switchAuthTab(tab) {
+    const loginForm = document.getElementById('loginForm');
+    const signupForm = document.getElementById('signupForm');
+    const loginBtn = document.getElementById('loginTabBtn');
+    const signupBtn = document.getElementById('signupTabBtn');
+
+    if (tab === 'login') {
+        loginForm.style.display = 'block';
+        signupForm.style.display = 'none';
+        loginBtn.style.background = '#0284c7';
+        loginBtn.style.color = '#ffffff';
+        signupBtn.style.background = 'transparent';
+        signupBtn.style.color = '#94a3b8';
+    } else {
+        loginForm.style.display = 'none';
+        signupForm.style.display = 'block';
+        signupBtn.style.background = '#0d9488';
+        signupBtn.style.color = '#ffffff';
+        loginBtn.style.background = 'transparent';
+        loginBtn.style.color = '#94a3b8';
+    }
+}
+
+function fillDemo(username, password) {
+    switchAuthTab('login');
+    document.getElementById('loginUsername').value = username;
+    document.getElementById('loginPassword').value = password;
+}
+</script>
+{% endblock %}
