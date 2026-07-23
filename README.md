@@ -107,7 +107,7 @@ You can use the following credentials to log in and test the application:
 
 ## 🖼️ Screenshots
 
-| Dashboard | Appointments |
+| Registration | Appointments |
 | :---: | :---: |
 | <img src="Images/Registeration.png"> | <img src="Images/Screenshot 2026-07-23 204159.png"> |
 
